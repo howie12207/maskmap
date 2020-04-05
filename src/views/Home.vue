@@ -26,7 +26,14 @@
           <div class="update-time" v-if="maskData.length > 0">最後更新 {{ updateTime }}</div>
         </div>
         <div class="pharmacy-list" v-if="pharmacies.length > 0">
-          <div class="pharmacy" v-for="item in pharmacies" :key="item.properties.id">
+          <div
+            class="pharmacy"
+            @click="openPopup(item.geometry.coordinates[1],
+            item.geometry.coordinates[0],
+            item.properties)"
+            v-for="item in pharmacies"
+            :key="item.properties.id"
+          >
             <h3 class="name">{{ item.properties.name }}</h3>
             <p class="phone">
               <i class="el-icon-phone"></i>
@@ -151,6 +158,10 @@ export default {
     // 改變所選的區域
     changeDistrict() {
       this.$refs.osmMap.updateMaker();
+    },
+    // 開啟地圖的Popup視窗
+    openPopup(y, x, pharmacy) {
+      this.$refs.osmMap.panTo(y, x, pharmacy);
     }
   }
 };
@@ -204,6 +215,7 @@ export default {
         border-radius: 4px;
         box-shadow: 0px 1px 6px #000000;
         background: #ffffff 0% 0% no-repeat padding-box;
+        cursor: pointer;
         .name {
           font-weight: 700;
           line-height: 20px;

@@ -54,7 +54,7 @@ export default {
     drawMap(y = 25.01741, x = 121.476963) {
       map = L.map("map", {
         center: [y, x],
-        zoom: 14
+        zoom: 15
       });
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
@@ -65,16 +65,20 @@ export default {
     updateMaker() {
       const vm = this;
       vm.removeMapMarker();
-      console.log(vm.pharmacies, "111");
       setTimeout(() => {
+        if (vm.pharmacies.length === 0) return;
         vm.pharmacies.forEach(item => {
-          console.log(vm.pharmacies, "222");
           vm.addMaker(
             item.geometry.coordinates[1],
             item.geometry.coordinates[0],
             item.properties
           );
         });
+        vm.panTo(
+          vm.pharmacies[0].geometry.coordinates[1],
+          vm.pharmacies[0].geometry.coordinates[0],
+          vm.pharmacies[0].properties
+        );
       }, 16);
     },
     // 添加座標
@@ -124,9 +128,17 @@ export default {
         );
     },
     // 移動位置
-    // panTo(y,x,pharmacy){
-
-    // },
+    panTo(y, x, pharmacy) {
+      // 移動
+      map.panTo(new L.LatLng(y, x));
+      // 打開內容
+      map.eachLayer(layer => {
+        if (!layer._popup) return;
+        if (layer._popup._content.indexOf(pharmacy.address) !== -1) {
+          layer.openPopup();
+        }
+      });
+    },
     // 移除圖層
     removeMapMarker() {
       map.eachLayer(layer => {
@@ -146,6 +158,9 @@ export default {
 }
 
 .leaflet-popup {
+  .leaflet-popup-content {
+    min-width: 200px;
+  }
   .name {
     font-size: 16px;
     font-weight: 700;
