@@ -5,13 +5,13 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    maskData: [],
-    pharmacies: [],
+    // maskData: [],
+    // pharmacies: [],
   },
   mutations: {
-    PHARMACIES(state, payload) {
-      state.pharmacies = payload;
-    },
+    // PHARMACIES(state, payload) {
+    //   state.pharmacies = payload;
+    // },
   },
   actions: {
     // 更新座標

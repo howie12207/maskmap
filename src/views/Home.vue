@@ -116,7 +116,7 @@ export default {
       let ary = [];
       if (vm.selectDistrict) {
         vm.maskData.forEach(item => {
-          if (vm.selectDistrict === item.properties.town) {
+          if (vm.selectCounty === item.properties.county && vm.selectDistrict === item.properties.town) {
             ary.push(item);
           }
         });
