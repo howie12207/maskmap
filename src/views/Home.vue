@@ -76,6 +76,7 @@
 <script>
 import city from "@/assets/city.json";
 import OsmMap from "@/components/OsmMap.vue";
+import { apiPharmacies } from "@/api/index.js";
 
 export default {
   name: "Home",
@@ -116,7 +117,10 @@ export default {
       let ary = [];
       if (vm.selectDistrict) {
         vm.maskData.forEach(item => {
-          if (vm.selectCounty === item.properties.county && vm.selectDistrict === item.properties.town) {
+          if (
+            vm.selectCounty === item.properties.county &&
+            vm.selectDistrict === item.properties.town
+          ) {
             ary.push(item);
           }
         });
@@ -132,14 +136,11 @@ export default {
   },
   methods: {
     // 取得口罩數量API
-    getMaskApi() {
+    async getMaskApi() {
       const vm = this;
-      let url =
-        "https://raw.githubusercontent.com/kiang/pharmacies/master/json/points.json?fbclid=IwAR3iWfFZ0I2d1h7GywkWypN4gOJaGNMATajaR58qY2wwtlC9b9LVaiaJNMc";
-      vm.axios
-        .get(url)
+      await apiPharmacies()
         .then(res => {
-          vm.maskData = res.data.features;
+          vm.maskData = res.features;
         })
         .catch(err => console.log(err));
     },
